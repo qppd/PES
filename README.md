@@ -21,17 +21,17 @@
 <h2>👥 User Roles</h2>
 
 <ul>
-  <li><strong>Admin</strong> – Full access to announcements, financial reports, and system management via an admin panel</li>
-  <li><strong>Teacher</strong> – Post events, announcements, and view class reports</li>
-  <li><strong>Parent</strong> – Receive updates and view student-related information</li>
+  <li><strong>Admin</strong> – Full access to announcements, events, financial reports, and system management via an admin panel</li>
+  <li><strong>Teacher</strong> – Full access to announcements, events, announcements, financial reports</li>
+  <li><strong>Parent</strong> – Receive updates and view SPTA related information</li>
   <li><strong>Guest</strong> – Limited access for viewing general announcements or public events</li>
 </ul>
 
 <h2>✨ Features</h2>
 
 <ul>
-  <li>📢 Announcements board (via Firebase Firestore)</li>
-  <li>📅 Events calendar for school-wide activities</li>
+  <li>📢 Announcements board</li>
+  <li>📅 Events calendar for school activities</li>
   <li>💰 Financial reports (role-restricted access)</li>
   <li>👨‍💼 Admin panel for managing content and users</li>
   <li>👤 Profile tab with account settings and logout options</li>
