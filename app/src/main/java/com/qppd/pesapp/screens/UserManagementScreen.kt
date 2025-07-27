@@ -352,30 +352,34 @@ fun AddUserDialog(
                 )
                 
                 // Role Selection
+                var roleExpanded by remember { mutableStateOf(false) }
                 ExposedDropdownMenuBox(
-                    expanded = false,
-                    onExpandedChange = { },
+                    expanded = roleExpanded,
+                    onExpandedChange = { roleExpanded = it },
                 ) {
                     OutlinedTextField(
                         value = selectedRole.name,
                         onValueChange = { },
                         readOnly = true,
                         label = { Text("Role") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = false) },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = roleExpanded) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor()
                     )
                     
-                    DropdownMenu(
-                        expanded = false,
-                        onDismissRequest = { },
+                    ExposedDropdownMenu(
+                        expanded = roleExpanded,
+                        onDismissRequest = { roleExpanded = false },
                         modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                     ) {
                         for (role in UserRole.values()) {
                             DropdownMenuItem(
                                 text = { Text(role.name) },
-                                onClick = { selectedRole = role }
+                                onClick = { 
+                                    selectedRole = role
+                                    roleExpanded = false 
+                                }
                             )
                         }
                     }
@@ -446,30 +450,34 @@ fun EditUserDialog(
                 )
                 
                 // Role Selection
+                var roleExpanded by remember { mutableStateOf(false) }
                 ExposedDropdownMenuBox(
-                    expanded = false,
-                    onExpandedChange = { },
+                    expanded = roleExpanded,
+                    onExpandedChange = { roleExpanded = it },
                 ) {
                     OutlinedTextField(
                         value = selectedRole.name,
                         onValueChange = { },
                         readOnly = true,
                         label = { Text("Role") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = false) },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = roleExpanded) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor()
                     )
                     
-                    DropdownMenu(
-                        expanded = false,
-                        onDismissRequest = { },
+                    ExposedDropdownMenu(
+                        expanded = roleExpanded,
+                        onDismissRequest = { roleExpanded = false },
                         modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                     ) {
                         for (role in UserRole.values()) {
                             DropdownMenuItem(
                                 text = { Text(role.name) },
-                                onClick = { selectedRole = role }
+                                onClick = {
+                                    selectedRole = role
+                                    roleExpanded = false
+                                }
                             )
                         }
                     }

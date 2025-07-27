@@ -105,30 +105,34 @@ fun AddEditFinancialReportDialog(
                     
                     item {
                         // Category
+                        var categoryExpanded by remember { mutableStateOf(false) }
                         ExposedDropdownMenuBox(
-                            expanded = false,
-                            onExpandedChange = { },
+                            expanded = categoryExpanded,
+                            onExpandedChange = { categoryExpanded = it },
                         ) {
                             OutlinedTextField(
                                 value = category.name.replace("_", " "),
                                 onValueChange = { },
                                 readOnly = true,
                                 label = { Text("Category") },
-                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = false) },
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .menuAnchor()
                             )
                             
-                            DropdownMenu(
-                                expanded = false,
-                                onDismissRequest = { },
+                            ExposedDropdownMenu(
+                                expanded = categoryExpanded,
+                                onDismissRequest = { categoryExpanded = false },
                                 modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                             ) {
                                 for (cat in ReportCategory.values()) {
                                     DropdownMenuItem(
                                         text = { Text(cat.name.replace("_", " ")) },
-                                        onClick = { category = cat }
+                                        onClick = { 
+                                            category = cat
+                                            categoryExpanded = false 
+                                        }
                                     )
                                 }
                             }
@@ -198,30 +202,34 @@ fun AddEditFinancialReportDialog(
                     
                     item {
                         // Status
+                        var statusExpanded by remember { mutableStateOf(false) }
                         ExposedDropdownMenuBox(
-                            expanded = false,
-                            onExpandedChange = { },
+                            expanded = statusExpanded,
+                            onExpandedChange = { statusExpanded = it },
                         ) {
                             OutlinedTextField(
                                 value = status.name.replace("_", " "),
                                 onValueChange = { },
                                 readOnly = true,
                                 label = { Text("Status") },
-                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = false) },
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = statusExpanded) },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .menuAnchor()
                             )
                             
-                            DropdownMenu(
-                                expanded = false,
-                                onDismissRequest = { },
+                            ExposedDropdownMenu(
+                                expanded = statusExpanded,
+                                onDismissRequest = { statusExpanded = false },
                                 modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                             ) {
                                 for (stat in ReportStatus.values()) {
                                     DropdownMenuItem(
                                         text = { Text(stat.name.replace("_", " ")) },
-                                        onClick = { status = stat }
+                                        onClick = {
+                                            status = stat
+                                            statusExpanded = false
+                                        }
                                     )
                                 }
                             }
