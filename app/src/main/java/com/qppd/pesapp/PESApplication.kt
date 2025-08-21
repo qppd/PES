@@ -1,25 +1,44 @@
 package com.qppd.pesapp
 
 import android.app.Application
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.*
+import com.qppd.pesapp.data.worker.SyncWorker
+import dagger.hilt.android.HiltAndroidApp
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class PESApplication : Application() {
+@HiltAndroidApp
+@HiltAndroidApp
+class PESApplication : Application(), Configuration.Provider {
     
-    companion object {
-        lateinit var auth: FirebaseAuth
-        lateinit var firestore: FirebaseFirestore
-    }
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+    
+    @Inject
+    lateinit var authManager: AuthManager
+    
+    @Inject
+    lateinit var syncManager: SyncManager
     
     override fun onCreate() {
         super.onCreate()
         
-        // Initialize Firebase
-        //FirebaseApp.initializeApp(this)
-        
-        // Initialize Firebase services
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        // Observe auth state and manage sync accordingly
+        lifecycleScope.launch {
+            authManager.getCurrentUserId()?.let { userId ->
+                userRepository.observeUserById(userId)
+                    .filterNotNull()
+                    .collect { user ->
+                        syncManager.schedulePeriodicSync(user.schoolId)
+                    }
+            }
+        }
     }
-} 
+    
+    override fun getWorkManagerConfiguration(): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+    }
+}

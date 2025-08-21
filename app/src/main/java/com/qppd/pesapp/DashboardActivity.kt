@@ -42,22 +42,32 @@ import com.qppd.pesapp.models.Announcement
 import com.qppd.pesapp.auth.EventManager
 import com.qppd.pesapp.models.Event
 
+@AndroidEntryPoint
 class DashboardActivity : ComponentActivity() {
-    private val authManager = AuthManager.getInstance()
+    @Inject
+    lateinit var authManager: AuthManager
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         
-        // Check if user is logged in, if not redirect to login
-        if (!authManager.isLoggedIn()) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-            return
+        lifecycleScope.launch {
+            authManager.isLoggedIn.collect { isLoggedIn ->
+                if (!isLoggedIn) {
+                    startActivity(Intent(this@MainActivity, MainActivity::class.java))
+                    finish()
+                    return@collect
+                }
+            }
         }
         
         setContent {
             PESAppTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    PESAppNavigation()
                     DashboardScreen(
                         onLogout = {
                             authManager.signOut()

@@ -29,23 +29,31 @@ import kotlinx.coroutines.launch
 import com.qppd.pesapp.auth.AuthManager
 import com.qppd.pesapp.ui.theme.PESAppTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val authManager = AuthManager.getInstance()
+    @Inject
+    lateinit var authManager: AuthManager
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         
-        // Check if user is already logged in
-        if (authManager.isLoggedIn()) {
-            startActivity(Intent(this, DashboardActivity::class.java))
-            finish()
-            return
+        lifecycleScope.launch {
+            authManager.isLoggedIn.collect { isLoggedIn ->
+                if (isLoggedIn) {
+                    startActivity(Intent(this@MainActivity, DashboardActivity::class.java))
+                    finish()
+                    return@collect
+                }
+            }
         }
         
         setContent {
             PESAppTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
                     LoginScreen(
                         onLoginSuccess = {
                             startActivity(Intent(this@MainActivity, DashboardActivity::class.java))
