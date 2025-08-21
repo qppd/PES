@@ -1,55 +1,48 @@
-<h1 align="center">🏫 PES Android App (Panaon Elementary School)</h1>
 
-<p align="center">
-  A role-based native Android app built for <strong>Panaon Elementary School</strong> to streamline school operations, announcements, event sharing, and parent-teacher engagement.
-</p>
+# PES Android App – Panaon Elementary School
 
-<p align="center">
-  <img src="https://img.shields.io/badge/platform-Android-green" alt="Platform">
-  <img src="https://img.shields.io/badge/language-Kotlin-purple" alt="Language">
-  <img src="https://img.shields.io/github/repo-size/qppd/PES" alt="Repo size">
-</p>
+A native Android application designed for **Panaon Elementary School** to streamline school operations, announcements, event management, and parent-teacher engagement. The app provides a secure, role-based experience for Admins, Teachers, Parents, and Guests, leveraging modern Android technologies and Firebase integration.
 
-<hr>
+---
 
-<h2>📲 Overview</h2>
+## Table of Contents
 
-<p>
-  The PES App is a role-based school management system designed to improve communication, transparency, and access to information across the school community. It supports separate experiences for Admins, Teachers, Parents, and Guests, with powerful features like financial tracking, announcements, and event calendars.
-</p>
+- [Description](#description)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Running Tests](#running-tests)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
+- [Authors](#authors)
+- [Acknowledgements](#acknowledgements)
 
-<h2>👥 User Roles</h2>
+---
 
-<ul>
-  <li><strong>Admin</strong> – Full access to announcements, events, financial reports, and system management via an admin panel</li>
-  <li><strong>Teacher</strong> – Full access to announcements, events, announcements, financial reports</li>
-  <li><strong>Parent</strong> – Receive updates and view SPTA related information</li>
-  <li><strong>Guest</strong> – Limited access for viewing general announcements or public events</li>
-</ul>
+## Description
 
-<h2>✨ Features</h2>
+The PES Android App is a comprehensive school management system that enhances communication, transparency, and access to information within the school community. It offers tailored interfaces and permissions for different user roles, ensuring that each stakeholder—Admin, Teacher, Parent, or Guest—has access to the tools and information relevant to them.
 
-<ul>
-  <li>📢 Announcements board</li>
-  <li>📅 Events calendar for school activities</li>
-  <li>💰 Financial reports (role-restricted access)</li>
-  <li>👨‍💼 Admin panel for managing content and users</li>
-  <li>👤 Profile tab with account settings and logout options</li>
-  <li>🔐 Secure login and role-based navigation</li>
-  <li>📱 Bottom tab navigation for better UX</li>
-</ul>
+---
 
-<h2>🛠 Tech Stack</h2>
+## Features
 
-<ul>
-  <li><strong>Kotlin</strong> – Native Android development</li>
-  <li><strong>Jetpack Compose</strong> – Modern UI toolkit</li>
-  <li><strong>Firebase</strong> – Authentication and Firestore database</li>
-</ul>
+- **Role-Based Access:** Distinct experiences for Admins, Teachers, Parents, and Guests.
+- **Announcements Board:** Centralized platform for school-wide updates.
+- **Events Calendar:** View and manage upcoming school activities.
+- **Financial Reports:** Secure, role-restricted access to financial data.
+- **Admin Panel:** Manage users, content, and system settings.
+- **Profile Management:** Update account settings and secure logout.
+- **Secure Authentication:** Firebase-backed login and user management.
+- **Modern UI:** Built with Jetpack Compose and bottom tab navigation for intuitive UX.
 
-<h2>📂 Folder Structure</h2>
+---
 
-<pre>
+## Project Structure
+
+```
 java/com/qppd/pesapp/
 ├── MainActivity.kt           # App entry point
 ├── DashboardActivity.kt      # Bottom tab dashboard
@@ -57,37 +50,88 @@ java/com/qppd/pesapp/
 ├── auth/                     # Login and AuthManager
 ├── models/                   # User data, roles, announcement models
 └── features/                 # Event, Announcement, Financial modules
-</pre>
+```
 
-<h2>🚀 Getting Started</h2>
+---
 
-<ol>
-  <li>Clone the repository:
-    <pre><code>git clone https://github.com/qppd/PES.git</code></pre>
-  </li>
-  <li>Open the project in <strong>Android Studio</strong></li>
-  <li>Sync Gradle and install dependencies</li>
-  <li>Add your <code>google-services.json</code> to connect to Firebase</li>
-  <li>Run the app on an Android device or emulator</li>
-</ol>
+## Installation
 
-<h2>👨‍💻 Developer</h2>
+1. **Clone the Repository**
+  ```sh
+  git clone https://github.com/qppd/PES.git
+  ```
+2. **Open in Android Studio**
+  - Launch Android Studio and select `Open an existing project`.
+3. **Sync Gradle**
+  - Allow Gradle to sync and download dependencies.
+4. **Configure Firebase**
+  - Add your `google-services.json` file to the `app/` directory for Firebase integration.
+5. **Build & Run**
+  - Connect an Android device or start an emulator, then click **Run**.
 
-<p>
-  <strong>Sajed Mendoza</strong><br>
-  <em>Software & Hardware Developer @ QPPD</em><br>
-  📧 <a href="mailto:qppdcontact@gmail.com">quezon.province.pd@gmail.com</a><br>
-  🌐 <a href="https://github.com/qppd" target="_blank">github.com/qppd</a>
-</p>
+---
 
-<h2>📄 License</h2>
+## Usage
 
-<p>
-  This project is licensed under the <strong>MIT License</strong>. See the <code>LICENSE</code> file for more info.
-</p>
+- **Login:** Sign in with your assigned credentials. Access is determined by your user role.
+- **Navigation:** Use the bottom tab bar to switch between Announcements, Events, Financials, and Profile.
+- **Admin Functions:** Admins can manage users, content, and view detailed reports via the admin panel.
+- **Parents & Guests:** View public announcements and events; parents can access SPTA-related information.
 
-<hr>
+---
 
-<p align="center">
-  Made with ❤️ for Panaon Elementary School
-</p>
+## Running Tests
+
+> **Note:** Automated testing is in progress. To run available unit tests:
+
+1. Open the project in Android Studio.
+2. Right-click the `test` or `androidTest` directory.
+3. Select **Run Tests**.
+
+---
+
+## Documentation
+
+- **Code Documentation:** Inline comments and KDoc are provided throughout the codebase.
+- **Architecture:** The app follows a modular structure with clear separation of concerns.
+- **Further Reading:** See the [Wiki](https://github.com/qppd/PES/wiki) (if available) for detailed guides.
+
+---
+
+## Contributing
+
+Contributions are welcome! To contribute:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/your-feature`).
+3. Commit your changes with clear messages.
+4. Push to your fork and submit a pull request.
+
+Please read the [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+---
+
+## License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Authors
+
+- **Sajed Mendoza**  
+  Software & Hardware Developer @ QPPD  
+  [quezon.province.pd@gmail.com](mailto:quezon.province.pd@gmail.com)  
+  [github.com/qppd](https://github.com/qppd)
+
+---
+
+## Acknowledgements
+
+- Panaon Elementary School for project inspiration and feedback.
+- Jetpack Compose and Firebase teams for their robust tools and documentation.
+- All contributors and testers supporting the app’s development.
+
+---
+
+_Made with ❤️ for Panaon Elementary School_
