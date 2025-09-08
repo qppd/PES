@@ -16,3 +16,6 @@ local.properties
 
 # Firebase config
 **/google-services.json
+
+# Supabase secrets
+app/src/main/assets/supabase.properties

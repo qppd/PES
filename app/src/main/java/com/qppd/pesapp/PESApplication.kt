@@ -1,25 +1,26 @@
 package com.qppd.pesapp
 
 import android.app.Application
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Properties
 
 class PESApplication : Application() {
-    
-    companion object {
-        lateinit var auth: FirebaseAuth
-        lateinit var firestore: FirebaseFirestore
-    }
-    
+    lateinit var supabaseUrl: String
+    lateinit var supabaseAnonKey: String
+
     override fun onCreate() {
         super.onCreate()
-        
-        // Initialize Firebase
-        //FirebaseApp.initializeApp(this)
-        
-        // Initialize Firebase services
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        val properties = Properties()
+        try {
+            assets.open("supabase.properties").use { inputStream ->
+                properties.load(inputStream)
+            }
+            supabaseUrl = properties.getProperty("SUPABASE_URL") ?: ""
+            supabaseAnonKey = properties.getProperty("SUPABASE_ANON_KEY") ?: ""
+        } catch (e: Exception) {
+            supabaseUrl = "https://sydibyybnowngxzcnvqo.supabase.co"
+            supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN5ZGlieXlibm93bmd4emNudnFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4MjgxOTYsImV4cCI6MjA3MjQwNDE5Nn0.hJ4yynMI9nRGoLILkNRLfTx3sE0MU9Qb3oroGCue6ac"
+            e.printStackTrace()
+        }
+        // TODO: Initialize Supabase client here using supabaseUrl and supabaseAnonKey
     }
-} 
+}

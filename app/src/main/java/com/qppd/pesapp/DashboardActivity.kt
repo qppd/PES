@@ -83,18 +83,8 @@ fun DashboardScreen(onLogout: () -> Unit) {
 
     // Get current user data
     LaunchedEffect(Unit) {
-        authManager.getCurrentUser()?.let { firebaseUser ->
-            currentUser = User(
-                uid = firebaseUser.uid,
-                email = firebaseUser.email ?: "",
-                displayName = firebaseUser.displayName ?: "User",
-                role = if (firebaseUser.email?.contains("admin") == true) UserRole.ADMIN
-                       else if (firebaseUser.email?.contains("teacher") == true) UserRole.TEACHER
-                       else if (firebaseUser.email?.contains("parent") == true) UserRole.PARENT
-                       else UserRole.GUEST
-            )
-        }
-        isLoading = false
+    // TODO: Replace Firebase user fetch with Supabase user fetch
+    isLoading = false
     }
 
     if (isLoading) {
@@ -313,7 +303,7 @@ fun ParentProfileScreen(onLogout: () -> Unit) {
         currentUser?.let { user ->
             email = user.email ?: ""
             displayName = user.displayName ?: "User"
-            // In a real app, you'd fetch contact from Firestore
+            // TODO: Fetch contact from Supabase
             contact = "+63 963 490 5586"
         }
     }
@@ -495,7 +485,7 @@ fun HomeScreen(currentUserRole: UserRole? = null) {
     
     val eventManager = EventManager.getInstance()
     
-    // Load events from Firestore
+    // TODO: Load events from Supabase
     LaunchedEffect(Unit) {
         try {
             isLoading = true
@@ -536,7 +526,7 @@ fun HomeScreen(currentUserRole: UserRole? = null) {
                     )
                 )
                 
-                // Add sample events to Firestore
+                // TODO: Add sample events to Supabase
                 sampleEvents.forEach { event ->
                     eventManager.addEvent(event)
                 }

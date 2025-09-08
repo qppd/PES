@@ -1,8 +1,9 @@
 plugins {
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.google.gms.google.services)
+    // alias(libs.plugins.google.gms.google.services) // Removed for no Firebase
 }
 
 android {
@@ -42,12 +43,13 @@ android {
 }
 
 dependencies {
-
-
+    // Supabase dependencies
+    implementation(platform("io.github.jan-tennert.supabase:bom:2.3.3"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.ktor:ktor-client-android:2.3.9")
 
     implementation("androidx.compose.material:material-icons-extended:1.6.0")
-
-
+    
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -67,10 +69,10 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("androidx.compose.material:material:1.5.4")
-    implementation(libs.firebase.database)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.storage)
+    // implementation(libs.firebase.database) // Removed for no Firebase
+    // implementation(libs.firebase.auth)
+    // implementation(libs.firebase.firestore)
+    // implementation(libs.firebase.storage)
     implementation(libs.coil.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
