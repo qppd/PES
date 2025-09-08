@@ -33,7 +33,7 @@ import com.qppd.pesapp.auth.ProfileManager
 import com.qppd.pesapp.auth.UserManager
 import com.qppd.pesapp.models.Profile
 import com.qppd.pesapp.models.UserRole
-import com.qppd.pesapp.utils.FirebaseImageUploader
+import com.qppd.pesapp.utils.SupabaseImageUploader
 import kotlinx.coroutines.launch
 
 @Composable
@@ -62,7 +62,7 @@ fun ProfileScreen(onLogout: () -> Unit) {
             // This would typically be done in a ViewModel or similar
             (context as? androidx.activity.ComponentActivity)?.lifecycleScope?.launch {
                 try {
-                    val imageUrl = FirebaseImageUploader.uploadImage(context, it, "profiles")
+                    val imageUrl = SupabaseImageUploader.uploadImage(context, it, "profiles")
                     if (imageUrl != null) {
                         val result = profileManager.updateProfileImage(imageUrl)
                         if (result.isSuccess) {

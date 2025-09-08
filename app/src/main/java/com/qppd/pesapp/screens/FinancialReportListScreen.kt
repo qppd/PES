@@ -560,6 +560,9 @@ fun FinancialReportCard(
                             ReportStatus.COMPLETED -> MaterialTheme.colorScheme.secondary
                             ReportStatus.ON_HOLD -> MaterialTheme.colorScheme.tertiary
                             ReportStatus.CANCELLED -> MaterialTheme.colorScheme.error
+                            ReportStatus.APPROVED -> MaterialTheme.colorScheme.primary
+                            ReportStatus.PENDING -> MaterialTheme.colorScheme.tertiary
+                            ReportStatus.REJECTED -> MaterialTheme.colorScheme.error
                         }
                     )
                 }

@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.qppd.pesapp"
-        minSdk = 23
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -43,10 +43,13 @@ android {
 }
 
 dependencies {
-    // Supabase dependencies
-    implementation(platform("io.github.jan-tennert.supabase:bom:2.3.3"))
+    // Supabase dependencies using BOM for version management
+    implementation(platform("io.github.jan-tennert.supabase:bom:3.2.2"))
+    implementation("io.github.jan-tennert.supabase:supabase-kt")
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
-    implementation("io.ktor:ktor-client-android:2.3.9")
+    implementation("io.github.jan-tennert.supabase:auth-kt")
+    implementation("io.github.jan-tennert.supabase:storage-kt")
+    implementation("io.ktor:ktor-client-android:3.2.2")
 
     implementation("androidx.compose.material:material-icons-extended:1.6.0")
     

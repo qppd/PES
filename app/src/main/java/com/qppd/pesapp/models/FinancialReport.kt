@@ -4,7 +4,10 @@ data class FinancialReport(
     val id: String = "",
     val title: String = "",
     val description: String = "",
+    val amount: Double = 0.0,
+    val reportType: String = "INCOME",
     val category: ReportCategory = ReportCategory.GENERAL,
+    val reportDate: Long = System.currentTimeMillis(),
     val totalBudget: Double = 0.0,
     val remainingBudget: Double = 0.0,
     val totalExpenses: Double = 0.0,
@@ -18,6 +21,7 @@ data class FinancialReport(
     val authorName: String = "",
     val attachments: List<String> = emptyList(), // URLs to uploaded documents
     val notes: String = "",
+    val isActive: Boolean = true,
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis()
 )
@@ -39,7 +43,10 @@ enum class ReportStatus {
     ACTIVE,
     COMPLETED,
     ON_HOLD,
-    CANCELLED
+    CANCELLED,
+    APPROVED,
+    PENDING,
+    REJECTED
 }
 
 data class Expense(

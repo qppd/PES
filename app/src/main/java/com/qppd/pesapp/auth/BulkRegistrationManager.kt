@@ -5,7 +5,6 @@ import com.qppd.pesapp.models.ExcelRow
 import com.qppd.pesapp.models.RegistrationStatus
 import com.qppd.pesapp.models.UserRole
 import com.qppd.pesapp.utils.CSVProcessor
-import kotlinx.coroutines.tasks.await
 
 class BulkRegistrationManager {
     private val authManager = AuthManager.getInstance()

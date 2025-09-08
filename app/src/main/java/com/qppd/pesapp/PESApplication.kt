@@ -1,6 +1,7 @@
 package com.qppd.pesapp
 
 import android.app.Application
+import com.qppd.pesapp.supabase.SupabaseManager
 import java.util.Properties
 
 class PESApplication : Application() {
@@ -17,10 +18,13 @@ class PESApplication : Application() {
             supabaseUrl = properties.getProperty("SUPABASE_URL") ?: ""
             supabaseAnonKey = properties.getProperty("SUPABASE_ANON_KEY") ?: ""
         } catch (e: Exception) {
+            // Use default values if properties file doesn't exist
             supabaseUrl = "https://sydibyybnowngxzcnvqo.supabase.co"
             supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN5ZGlieXlibm93bmd4emNudnFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4MjgxOTYsImV4cCI6MjA3MjQwNDE5Nn0.hJ4yynMI9nRGoLILkNRLfTx3sE0MU9Qb3oroGCue6ac"
             e.printStackTrace()
         }
-        // TODO: Initialize Supabase client here using supabaseUrl and supabaseAnonKey
+        
+        // Initialize Supabase client with fallback handling
+        SupabaseManager.initialize(supabaseUrl, supabaseAnonKey)
     }
 }

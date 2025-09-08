@@ -1,16 +1,16 @@
 package com.qppd.pesapp.auth
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.qppd.pesapp.models.Profile
 import com.qppd.pesapp.models.User
-import com.qppd.pesapp.cache.CacheManager
-import kotlinx.coroutines.tasks.await
+import com.qppd.pesapp.supabase.SupabaseManager
+import com.qppd.pesapp.supabase.SupabaseUser
+import com.qppd.pesapp.supabase.toAppUser
+import com.qppd.pesapp.supabase.toSupabaseUser
+import io.github.jan.supabase.postgrest.from
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ProfileManager {
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val cacheManager = CacheManager.getInstance()
     private val userManager = UserManager.getInstance()
     
     companion object {
@@ -24,92 +24,150 @@ class ProfileManager {
         }
     }
     
-    // Get current user profile with caching
+    // Get current user profile
     suspend fun getCurrentUserProfile(): Profile? {
-        val currentUser = auth.currentUser ?: return null
-        val cacheKey = "${CacheManager.CacheKeys.USER_PROFILE}${currentUser.uid}"
-        
-        return cacheManager.getWithBackgroundRefresh(
-            key = cacheKey,
-            fetchFromNetwork = {
+        return withContext(Dispatchers.IO) {
+            val currentUser = AuthManager.getInstance().getCurrentUser() ?: return@withContext null
+            
+            SupabaseManager.withClientSuspend(
+                fallback = { 
+                    // Create profile from current user data as fallback
+                    Profile(
+                        uid = currentUser.uid,
+                        email = currentUser.email,
+                        displayName = currentUser.displayName,
+                        role = currentUser.role,
+                        profileImage = currentUser.profileImage,
+                        contactNumber = currentUser.contactNumber,
+                        children = currentUser.children
+                    )
+                }
+            ) { client ->
                 try {
-                    val document = firestore.collection("profiles").document(currentUser.uid).get().await()
-                    if (document.exists()) {
-                        document.toObject(Profile::class.java)
-                    } else {
-                        // If profile doesn't exist, create one from user data
-                        val userData = userManager.getCurrentUserData()
-                        userData?.let {
-                            val newProfile = Profile(
-                                uid = it.uid,
-                                email = it.email,
-                                displayName = it.displayName,
-                                role = it.role,
-                                profileImage = it.profileImage,
-                                contactNumber = it.contactNumber,
-                                children = it.children
-                            )
-                            // Save the new profile
-                            createProfile(newProfile)
-                            newProfile
+                    val supabaseUsers = client.from("users")
+                        .select() {
+                            filter {
+                                eq("id", currentUser.uid)
+                            }
                         }
+                        .decodeList<SupabaseUser>()
+                    
+                    if (supabaseUsers.isNotEmpty()) {
+                        val user = supabaseUsers.first().toAppUser()
+                        Profile(
+                            uid = user.uid,
+                            email = user.email,
+                            displayName = user.displayName,
+                            role = user.role,
+                            profileImage = user.profileImage,
+                            contactNumber = user.contactNumber,
+                            children = user.children
+                        )
+                    } else {
+                        // Create profile from current user data if not in database
+                        Profile(
+                            uid = currentUser.uid,
+                            email = currentUser.email,
+                            displayName = currentUser.displayName,
+                            role = currentUser.role,
+                            profileImage = currentUser.profileImage,
+                            contactNumber = currentUser.contactNumber,
+                            children = currentUser.children
+                        )
                     }
                 } catch (e: Exception) {
                     null
                 }
-            },
-            expirationDuration = CacheManager.CacheDurations.USER_PROFILE
-        )
+            }
+        }
     }
     
     // Get profile by user ID
     suspend fun getProfileByUserId(userId: String): Profile? {
-        val cacheKey = "${CacheManager.CacheKeys.USER_PROFILE}${userId}"
-        
-        return cacheManager.getWithBackgroundRefresh(
-            key = cacheKey,
-            fetchFromNetwork = {
+        return withContext(Dispatchers.IO) {
+            SupabaseManager.withClientSuspend(
+                fallback = { null }
+            ) { client ->
                 try {
-                    val document = firestore.collection("profiles").document(userId).get().await()
-                    document.toObject(Profile::class.java)
+                    val supabaseUsers = client.from("users")
+                        .select() {
+                            filter {
+                                eq("id", userId)
+                            }
+                        }
+                        .decodeList<SupabaseUser>()
+                    
+                    if (supabaseUsers.isNotEmpty()) {
+                        val user = supabaseUsers.first().toAppUser()
+                        Profile(
+                            uid = user.uid,
+                            email = user.email,
+                            displayName = user.displayName,
+                            role = user.role,
+                            profileImage = user.profileImage,
+                            contactNumber = user.contactNumber,
+                            children = user.children
+                        )
+                    } else {
+                        null
+                    }
                 } catch (e: Exception) {
                     null
                 }
-            },
-            expirationDuration = CacheManager.CacheDurations.USER_PROFILE
-        )
+            }
+        }
     }
     
     // Create a new profile
     suspend fun createProfile(profile: Profile): Result<Unit> {
-        return try {
-            firestore.collection("profiles").document(profile.uid).set(profile).await()
-            // Invalidate cache
-            cacheManager.remove("${CacheManager.CacheKeys.USER_PROFILE}${profile.uid}")
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
+        return withContext(Dispatchers.IO) {
+            try {
+                SupabaseManager.withClientSuspend(
+                    fallback = { }
+                ) { client ->
+                    val user = User(
+                        uid = profile.uid,
+                        email = profile.email,
+                        displayName = profile.displayName,
+                        role = profile.role,
+                        profileImage = profile.profileImage,
+                        contactNumber = profile.contactNumber,
+                        children = profile.children
+                    )
+                    client.from("users").insert(user.toSupabaseUser())
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
     
     // Update profile
     suspend fun updateProfile(updates: Map<String, Any>): Result<Unit> {
-        val currentUser = auth.currentUser ?: return Result.failure(Exception("No user logged in"))
+        val currentUser = AuthManager.getInstance().getCurrentUser() 
+            ?: return Result.failure(Exception("No user logged in"))
         
-        return try {
-            firestore.collection("profiles").document(currentUser.uid)
-                .update(updates).await()
-            // Invalidate cache
-            cacheManager.remove("${CacheManager.CacheKeys.USER_PROFILE}${currentUser.uid}")
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
+        return withContext(Dispatchers.IO) {
+            try {
+                SupabaseManager.withClientSuspend(
+                    fallback = { }
+                ) { client ->
+                    client.from("users")
+                        .update(updates) {
+                            filter { eq("id", currentUser.uid) }
+                        }
+                }
+                Result.success(Unit)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
         }
     }
     
     // Update profile image
     suspend fun updateProfileImage(imageUrl: String): Result<Unit> {
-        return updateProfile(mapOf("profileImage" to imageUrl))
+        return updateProfile(mapOf("profile_image" to imageUrl))
     }
     
     // Update user preferences

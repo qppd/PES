@@ -10,6 +10,10 @@ data class Announcement(
     val authorName: String = "",
     val imageUrl: String = "",
     val isPinned: Boolean = false,
+    val category: String = "GENERAL",
+    val priority: String = "MEDIUM",
+    val isActive: Boolean = true,
+    val targetRoles: List<String> = listOf("PARENT", "TEACHER", "ADMIN"),
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis(),
     val scheduledDate: Long? = null

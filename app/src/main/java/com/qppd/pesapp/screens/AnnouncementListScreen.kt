@@ -24,7 +24,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
 import androidx.compose.foundation.clickable
-import com.qppd.pesapp.utils.FirebaseImageUploader
+import com.qppd.pesapp.utils.SupabaseImageUploader
 import coil.compose.AsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -113,7 +113,7 @@ fun AnnouncementListScreen(currentUserRole: UserRole) {
                     isLoading = true
                     var imageUrl = ""
                     if (imageUri != null) {
-                        imageUrl = FirebaseImageUploader.uploadImage(context, imageUri) ?: ""
+                        imageUrl = SupabaseImageUploader.uploadImage(context, imageUri) ?: ""
                     }
                     val result = announcementManager.addAnnouncement(
                         Announcement(title = title, content = content, imageUrl = imageUrl)
@@ -140,7 +140,7 @@ fun AnnouncementListScreen(currentUserRole: UserRole) {
                     isLoading = true
                     var imageUrl = showEditDialog!!.imageUrl
                     if (imageUri != null && imageUri.toString() != imageUrl) {
-                        imageUrl = FirebaseImageUploader.uploadImage(context, imageUri) ?: ""
+                        imageUrl = SupabaseImageUploader.uploadImage(context, imageUri) ?: ""
                     }
                     val result = announcementManager.updateAnnouncement(
                         showEditDialog!!.copy(title = title, content = content, imageUrl = imageUrl)
