@@ -78,7 +78,7 @@ class AnnouncementManager {
     suspend fun getAllAnnouncements(): List<Announcement> {
         return withContext(Dispatchers.IO) {
             SupabaseManager.withClientSuspend(
-                fallback = { getSampleAnnouncements() }
+                fallback = { emptyList() }
             ) { client ->
                 try {
                     val supabaseAnnouncements = client.from("announcements")
@@ -86,13 +86,9 @@ class AnnouncementManager {
                         .decodeList<SupabaseAnnouncement>()
                         .filter { it.is_active }
                     
-                    if (supabaseAnnouncements.isEmpty()) {
-                        getSampleAnnouncements()
-                    } else {
-                        supabaseAnnouncements.map { it.toAppAnnouncement() }
-                    }
+                    supabaseAnnouncements.map { it.toAppAnnouncement() }
                 } catch (e: Exception) {
-                    getSampleAnnouncements()
+                    emptyList()
                 }
             }
         }
@@ -154,30 +150,5 @@ class AnnouncementManager {
                 Result.failure(e)
             }
         }
-    }
-    
-    private fun getSampleAnnouncements(): List<Announcement> {
-        return listOf(
-            Announcement(
-                id = "1",
-                title = "School Enrollment Now Open",
-                content = "Enrollment for the academic year 2025-2026 is now open. Please prepare the required documents and visit the school office.",
-                authorName = "School Admin",
-                category = "ACADEMIC",
-                priority = "HIGH",
-                targetRoles = listOf("PARENT"),
-                createdAt = System.currentTimeMillis() - (2 * 24 * 60 * 60 * 1000L)
-            ),
-            Announcement(
-                id = "2", 
-                title = "Parent-Teacher Conference Schedule",
-                content = "The quarterly parent-teacher conference is scheduled for next week. Individual schedules will be sent via SMS.",
-                authorName = "Academic Coordinator",
-                category = "MEETING",
-                priority = "MEDIUM",
-                targetRoles = listOf("PARENT", "TEACHER"),
-                createdAt = System.currentTimeMillis() - (5 * 24 * 60 * 60 * 1000L)
-            )
-        )
     }
 } 

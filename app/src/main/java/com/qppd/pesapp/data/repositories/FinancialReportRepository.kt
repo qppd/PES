@@ -93,7 +93,7 @@ class FinancialReportRepository {
     suspend fun getAllReports(): List<FinancialReport> {
         return withContext(Dispatchers.IO) {
             SupabaseManager.withClientSuspend(
-                fallback = { getSampleReports() }
+                fallback = { emptyList() }
             ) { client ->
                 try {
                     val supabaseReports = client.from("financial_reports")
@@ -101,13 +101,9 @@ class FinancialReportRepository {
                         .decodeList<SupabaseFinancialReport>()
                         .filter { it.is_active }
                     
-                    if (supabaseReports.isEmpty()) {
-                        getSampleReports()
-                    } else {
-                        supabaseReports.map { it.toAppFinancialReport() }
-                    }
+                    supabaseReports.map { it.toAppFinancialReport() }
                 } catch (e: Exception) {
-                    getSampleReports()
+                    emptyList()
                 }
             }
         }
@@ -312,32 +308,5 @@ class FinancialReportRepository {
 
     suspend fun getRemainingBudget(): Double {
         return getTotalBudget() - getTotalExpenses()
-    }
-    
-    private fun getSampleReports(): List<FinancialReport> {
-        return listOf(
-            FinancialReport(
-                id = "1",
-                title = "School Supplies Purchase",
-                description = "Purchased books, notebooks, and writing materials for Grade 1-6 students",
-                amount = 25000.0,
-                reportType = "EXPENSE",
-                category = ReportCategory.SUPPLIES,
-                reportDate = System.currentTimeMillis() - (5 * 24 * 60 * 60 * 1000L),
-                authorName = "School Admin",
-                status = ReportStatus.APPROVED
-            ),
-            FinancialReport(
-                id = "2",
-                title = "Parent Association Contribution", 
-                description = "Monthly contribution from Parent Association for school improvement projects",
-                amount = 50000.0,
-                reportType = "INCOME",
-                category = ReportCategory.SOLICITATIONS,
-                reportDate = System.currentTimeMillis() - (10 * 24 * 60 * 60 * 1000L),
-                authorName = "School Admin",
-                status = ReportStatus.APPROVED
-            )
-        )
     }
 } 

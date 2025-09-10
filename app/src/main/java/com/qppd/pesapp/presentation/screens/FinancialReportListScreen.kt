@@ -51,64 +51,7 @@ fun FinancialReportListScreen(currentUserRole: UserRole) {
     LaunchedEffect(Unit) {
         try {
             isLoading = true
-            val allReports = reportManager.getAllReports()
-            
-            // If no reports exist, add sample data for testing
-            if (allReports.isEmpty()) {
-                val sampleReports = listOf(
-                    FinancialReport(
-                        id = "1",
-                        title = "Coco Lilay Festival 2025",
-                        description = "Annual school festival with cultural performances and food stalls",
-                        category = ReportCategory.EVENTS,
-                        totalBudget = 50000.0,
-                        remainingBudget = 12500.0,
-                        totalExpenses = 37500.0,
-                        totalSolicitations = 15000.0,
-                        status = ReportStatus.ACTIVE,
-                        authorName = "School Admin",
-                        startDate = System.currentTimeMillis() - (30 * 24 * 60 * 60 * 1000L), // 30 days ago
-                        notes = "Major annual event for the school community"
-                    ),
-                    FinancialReport(
-                        id = "2",
-                        title = "Solar Power Station Project",
-                        description = "Installation of solar panels for sustainable energy",
-                        category = ReportCategory.INFRASTRUCTURE,
-                        totalBudget = 150000.0,
-                        remainingBudget = 0.0,
-                        totalExpenses = 150000.0,
-                        totalSolicitations = 75000.0,
-                        status = ReportStatus.COMPLETED,
-                        authorName = "School Admin",
-                        startDate = System.currentTimeMillis() - (90 * 24 * 60 * 60 * 1000L), // 90 days ago
-                        endDate = System.currentTimeMillis() - (30 * 24 * 60 * 60 * 1000L), // 30 days ago
-                        notes = "Successfully completed solar installation"
-                    ),
-                    FinancialReport(
-                        id = "3",
-                        title = "School Supplies Fund",
-                        description = "Monthly budget for classroom supplies and materials",
-                        category = ReportCategory.SUPPLIES,
-                        totalBudget = 25000.0,
-                        remainingBudget = 8500.0,
-                        totalExpenses = 16500.0,
-                        totalSolicitations = 5000.0,
-                        status = ReportStatus.ACTIVE,
-                        authorName = "School Admin",
-                        startDate = System.currentTimeMillis() - (15 * 24 * 60 * 60 * 1000L), // 15 days ago
-                        notes = "Ongoing monthly supplies budget"
-                    )
-                )
-                
-                // Add sample reports to Firestore
-                sampleReports.forEach { report ->
-                    reportManager.addReport(report)
-                }
-                reports = sampleReports
-            } else {
-                reports = allReports
-            }
+            reports = reportManager.getAllReports()
             
             // Calculate summary
             totalBudget = reportManager.getTotalBudget()

@@ -26,7 +26,7 @@ class EventRepository {
     suspend fun getAllEvents(): List<Event> {
         return withContext(Dispatchers.IO) {
             SupabaseManager.withClientSuspend(
-                fallback = { getSampleEvents() }
+                fallback = { emptyList() }
             ) { client ->
                 try {
                     val supabaseEvents = client.from("events")
@@ -34,13 +34,9 @@ class EventRepository {
                         .decodeList<SupabaseEvent>()
                         .filter { it.is_active }
                     
-                    if (supabaseEvents.isEmpty()) {
-                        getSampleEvents()
-                    } else {
-                        supabaseEvents.map { it.toAppEvent() }
-                    }
+                    supabaseEvents.map { it.toAppEvent() }
                 } catch (e: Exception) {
-                    getSampleEvents()
+                    emptyList()
                 }
             }
         }
@@ -194,40 +190,5 @@ class EventRepository {
                 Result.failure(e)
             }
         }
-    }
-    
-    private fun getSampleEvents(): List<Event> {
-        return listOf(
-            Event(
-                id = "1",
-                title = "Coco Lilay Festival 2025",
-                description = "Annual school festival with cultural performances and food stalls. Students showcase traditional dances and local products.",
-                date = System.currentTimeMillis() + (30 * 24 * 60 * 60 * 1000L),
-                location = "School Grounds",
-                category = EventCategory.CULTURAL,
-                authorName = "School Admin",
-                tags = listOf("festival", "cultural", "celebration")
-            ),
-            Event(
-                id = "2",
-                title = "Rape Prevention Lecture",
-                description = "PMSg Mary Ann A Limbo conducted a lecture about rape prevention tips and other gender-based cases among the teachers and students.",
-                date = System.currentTimeMillis() + (15 * 24 * 60 * 60 * 1000L),
-                location = "School Auditorium",
-                category = EventCategory.WORKSHOP,
-                authorName = "School Admin",
-                tags = listOf("safety", "education", "awareness")
-            ),
-            Event(
-                id = "3",
-                title = "Parent-Teacher Meeting",
-                description = "Quarterly meeting to discuss student progress and school activities.",
-                date = System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000L),
-                location = "Classrooms",
-                category = EventCategory.MEETING,
-                authorName = "School Admin",
-                tags = listOf("meeting", "parent", "teacher")
-            )
-        )
     }
 }

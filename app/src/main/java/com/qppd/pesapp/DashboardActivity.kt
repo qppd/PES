@@ -328,17 +328,18 @@ fun ParentProfileScreen(onLogout: () -> Unit) {
 
     val authManager = AuthManager.getInstance()
 
+    var children by remember { mutableStateOf(emptyList<String>()) }
+
     LaunchedEffect(Unit) {
         val userSession = authManager.getCurrentUserSession()
         val appUser = mapSupabaseUserToAppUser(userSession)
         appUser?.let {
             email = it.email
             displayName = it.displayName
-            contact = "+63 963 490 5586" // Placeholder
+            contact = it.contactNumber.ifBlank { "" }
+            children = it.children // Load children from database
         }
     }
-
-    val children = listOf("Yrel Munda Mendoza", "Aiyeen Munda Mendoza") // Placeholder data
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -487,19 +488,7 @@ fun HomeScreen(currentUserRole: UserRole? = UserRole.GUEST) { // Default to GUES
     LaunchedEffect(Unit) {
         try {
             isLoading = true
-            val allEvents = eventManager.getAllEvents()
-            
-            if (allEvents.isEmpty()) {
-                val sampleEvents = listOf(
-                    Event(id = "1", title = "Coco Lilay Festival 2025", description = "Annual school festival...", date = System.currentTimeMillis() + (30 * 24 * 60 * 60 * 1000L), location = "School Grounds", category = com.qppd.pesapp.models.EventCategory.CULTURAL, authorName = "School Admin", tags = listOf("festival", "cultural")),
-                    Event(id = "2", title = "Rape Prevention Lecture", description = "PMSg Mary Ann A Limbo conducted...", date = System.currentTimeMillis() + (15 * 24 * 60 * 60 * 1000L), location = "School Auditorium", category = com.qppd.pesapp.models.EventCategory.WORKSHOP, authorName = "School Admin", tags = listOf("safety", "education")),
-                    Event(id = "3", title = "Parent-Teacher Meeting", description = "Quarterly meeting to discuss student progress.", date = System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000L), location = "Classrooms", category = com.qppd.pesapp.models.EventCategory.MEETING, authorName = "School Admin", tags = listOf("meeting", "parent"))
-                )
-                // sampleEvents.forEach { event -> eventManager.addEvent(event) } // Avoid adding duplicates
-                events = sampleEvents // Show sample events if Supabase is empty
-            } else {
-                events = allEvents
-            }
+            events = eventManager.getAllEvents()
             isLoading = false
         } catch (e: Exception) {
             errorMessage = "Failed to load events: ${e.message}"
