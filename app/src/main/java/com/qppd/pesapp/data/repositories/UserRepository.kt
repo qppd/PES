@@ -1,23 +1,24 @@
-package com.qppd.pesapp.auth
+package com.qppd.pesapp.data.repositories
 
+import com.qppd.pesapp.auth.AuthManager
+import com.qppd.pesapp.models.User
+import com.qppd.pesapp.models.UserRole
 import com.qppd.pesapp.data.remote.SupabaseManager
 import com.qppd.pesapp.data.remote.SupabaseUser
 import com.qppd.pesapp.data.remote.toAppUser
 import com.qppd.pesapp.data.remote.toSupabaseUser
-import com.qppd.pesapp.models.User
-import com.qppd.pesapp.models.UserRole
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class UserManager {
+class UserRepository {
     companion object {
         @Volatile
-        private var INSTANCE: UserManager? = null
+        private var INSTANCE: UserRepository? = null
         
-        fun getInstance(): UserManager {
+        fun getInstance(): UserRepository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: UserManager().also { INSTANCE = it }
+                INSTANCE ?: UserRepository().also { INSTANCE = it }
             }
         }
     }

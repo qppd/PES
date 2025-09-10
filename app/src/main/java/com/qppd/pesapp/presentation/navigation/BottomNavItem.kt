@@ -1,4 +1,4 @@
-package com.qppd.pesapp.navigation
+package com.qppd.pesapp.presentation.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

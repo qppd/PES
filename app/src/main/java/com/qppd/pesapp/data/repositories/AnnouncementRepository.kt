@@ -1,7 +1,7 @@
-package com.qppd.pesapp.auth
+package com.qppd.pesapp.data.repositories
 
-import com.qppd.pesapp.data.remote.SupabaseManager
 import com.qppd.pesapp.models.Announcement
+import com.qppd.pesapp.data.remote.SupabaseManager
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -63,14 +63,14 @@ fun Announcement.toSupabaseAnnouncement(): SupabaseAnnouncement {
     )
 }
 
-class AnnouncementManager {
+class AnnouncementRepository {
 
     companion object {
         @Volatile
-        private var INSTANCE: AnnouncementManager? = null
-        fun getInstance(): AnnouncementManager {
+        private var INSTANCE: AnnouncementRepository? = null
+        fun getInstance(): AnnouncementRepository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: AnnouncementManager().also { INSTANCE = it }
+                INSTANCE ?: AnnouncementRepository().also { INSTANCE = it }
             }
         }
     }

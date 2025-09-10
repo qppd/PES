@@ -1,4 +1,4 @@
-package com.qppd.pesapp.components
+package com.qppd.pesapp.presentation.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions

@@ -1,4 +1,4 @@
-package com.qppd.pesapp.supabase
+package com.qppd.pesapp.data.remote
 
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest

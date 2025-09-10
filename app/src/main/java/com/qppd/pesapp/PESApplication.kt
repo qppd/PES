@@ -1,7 +1,7 @@
 package com.qppd.pesapp
 
 import android.app.Application
-import com.qppd.pesapp.supabase.SupabaseManager
+import com.qppd.pesapp.data.remote.SupabaseManager
 import java.util.Properties
 
 class PESApplication : Application() {

@@ -2,7 +2,7 @@ package com.qppd.pesapp.utils
 
 import android.content.Context
 import android.net.Uri
-import com.qppd.pesapp.supabase.SupabaseManager
+import com.qppd.pesapp.data.remote.SupabaseManager
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

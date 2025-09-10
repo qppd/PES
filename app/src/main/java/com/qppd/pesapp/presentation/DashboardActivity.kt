@@ -1,4 +1,4 @@
-package com.qppd.pesapp
+package com.qppd.pesapp.presentation
 
 import android.content.Intent
 import android.os.Bundle
@@ -28,19 +28,21 @@ import androidx.compose.ui.res.painterResource
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.lifecycleScope
+import com.qppd.pesapp.MainActivity
+import com.qppd.pesapp.R
 import kotlinx.coroutines.launch
 
 import com.qppd.pesapp.auth.AuthManager
 import com.qppd.pesapp.models.User
 import com.qppd.pesapp.models.UserRole
-import com.qppd.pesapp.ui.theme.PESAppTheme
-import com.qppd.pesapp.models.Announcement
-import com.qppd.pesapp.auth.EventManager
-import com.qppd.pesapp.models.Event
-import com.qppd.pesapp.presentation.screens.AnnouncementListScreen
 import com.qppd.pesapp.presentation.screens.BulkRegistrationScreen
+import com.qppd.pesapp.ui.theme.PESAppTheme
+import com.qppd.pesapp.presentation.screens.AnnouncementListScreen
 import com.qppd.pesapp.presentation.screens.FinancialReportListScreen
 import com.qppd.pesapp.presentation.screens.UserManagementScreen
+import com.qppd.pesapp.models.Announcement
+import com.qppd.pesapp.data.repositories.EventRepository
+import com.qppd.pesapp.models.Event
 import io.github.jan.supabase.auth.user.UserSession // Updated import
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.JsonObject
@@ -482,12 +484,12 @@ fun HomeScreen(currentUserRole: UserRole? = UserRole.GUEST) { // Default to GUES
     var errorMessage by remember { mutableStateOf("") }
     var showAddEventDialog by remember { mutableStateOf(false) }
 
-    val eventManager = EventManager.getInstance()
+    val eventRepository = EventRepository.getInstance()
 
     LaunchedEffect(Unit) {
         try {
             isLoading = true
-            val allEvents = eventManager.getAllEvents()
+            val allEvents = eventRepository.getAllEvents()
             
             if (allEvents.isEmpty()) {
                 val sampleEvents = listOf(
@@ -495,7 +497,7 @@ fun HomeScreen(currentUserRole: UserRole? = UserRole.GUEST) { // Default to GUES
                     Event(id = "2", title = "Rape Prevention Lecture", description = "PMSg Mary Ann A Limbo conducted...", date = System.currentTimeMillis() + (15 * 24 * 60 * 60 * 1000L), location = "School Auditorium", category = com.qppd.pesapp.models.EventCategory.WORKSHOP, authorName = "School Admin", tags = listOf("safety", "education")),
                     Event(id = "3", title = "Parent-Teacher Meeting", description = "Quarterly meeting to discuss student progress.", date = System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000L), location = "Classrooms", category = com.qppd.pesapp.models.EventCategory.MEETING, authorName = "School Admin", tags = listOf("meeting", "parent"))
                 )
-                // sampleEvents.forEach { event -> eventManager.addEvent(event) } // Avoid adding duplicates
+                // sampleEvents.forEach { event -> eventRepository.addEvent(event) } // Avoid adding duplicates
                 events = sampleEvents // Show sample events if Supabase is empty
             } else {
                 events = allEvents

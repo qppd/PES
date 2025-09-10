@@ -1,4 +1,4 @@
-package com.qppd.pesapp.cache
+package com.qppd.pesapp.data.local
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

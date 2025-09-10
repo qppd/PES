@@ -1,4 +1,4 @@
-package com.qppd.pesapp.supabase
+package com.qppd.pesapp.data.remote
 
 import com.qppd.pesapp.models.User
 import com.qppd.pesapp.models.UserRole

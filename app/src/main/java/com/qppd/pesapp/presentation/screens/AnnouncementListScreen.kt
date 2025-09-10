@@ -1,4 +1,4 @@
-package com.qppd.pesapp.screens
+package com.qppd.pesapp.presentation.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-import com.qppd.pesapp.auth.AnnouncementManager
+import com.qppd.pesapp.data.repositories.AnnouncementRepository
 import com.qppd.pesapp.models.Announcement
 import com.qppd.pesapp.models.UserRole
 import android.net.Uri
@@ -36,13 +36,13 @@ fun AnnouncementListScreen(currentUserRole: UserRole) {
     var showEditDialog by remember { mutableStateOf<Announcement?>(null) }
     var showDetailDialog by remember { mutableStateOf<Announcement?>(null) }
     var errorMessage by remember { mutableStateOf("") }
-    val announcementManager = AnnouncementManager.getInstance()
+    val announcementRepository = AnnouncementRepository.getInstance()
     val context = LocalContext.current
 
     // Load announcements
     LaunchedEffect(Unit) {
         isLoading = true
-        announcements = announcementManager.getAllAnnouncements()
+        announcements = announcementRepository.getAllAnnouncements()
         isLoading = false
     }
 
@@ -86,9 +86,9 @@ fun AnnouncementListScreen(currentUserRole: UserRole) {
                         onDelete = {
                             (context as? androidx.activity.ComponentActivity)?.lifecycleScope?.launch {
                                 isLoading = true
-                                val result = announcementManager.deleteAnnouncement(announcement.id)
+                                val result = announcementRepository.deleteAnnouncement(announcement.id)
                                 if (result.isSuccess) {
-                                    announcements = announcementManager.getAllAnnouncements()
+                                    announcements = announcementRepository.getAllAnnouncements()
                                 } else {
                                     errorMessage = result.exceptionOrNull()?.message ?: "Delete failed"
                                 }
@@ -115,11 +115,11 @@ fun AnnouncementListScreen(currentUserRole: UserRole) {
                     if (imageUri != null) {
                         imageUrl = SupabaseImageUploader.uploadImage(context, imageUri) ?: ""
                     }
-                    val result = announcementManager.addAnnouncement(
+                    val result = announcementRepository.addAnnouncement(
                         Announcement(title = title, content = content, imageUrl = imageUrl)
                     )
                     if (result.isSuccess) {
-                        announcements = announcementManager.getAllAnnouncements()
+                        announcements = announcementRepository.getAllAnnouncements()
                         showAddDialog = false
                     } else {
                         errorMessage = result.exceptionOrNull()?.message ?: "Add failed"
@@ -142,11 +142,11 @@ fun AnnouncementListScreen(currentUserRole: UserRole) {
                     if (imageUri != null && imageUri.toString() != imageUrl) {
                         imageUrl = SupabaseImageUploader.uploadImage(context, imageUri) ?: ""
                     }
-                    val result = announcementManager.updateAnnouncement(
+                    val result = announcementRepository.updateAnnouncement(
                         showEditDialog!!.copy(title = title, content = content, imageUrl = imageUrl)
                     )
                     if (result.isSuccess) {
-                        announcements = announcementManager.getAllAnnouncements()
+                        announcements = announcementRepository.getAllAnnouncements()
                         showEditDialog = null
                     } else {
                         errorMessage = result.exceptionOrNull()?.message ?: "Update failed"

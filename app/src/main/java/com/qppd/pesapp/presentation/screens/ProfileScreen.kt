@@ -1,4 +1,4 @@
-package com.qppd.pesapp.screens
+package com.qppd.pesapp.presentation.screens
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

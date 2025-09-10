@@ -2,10 +2,10 @@ package com.qppd.pesapp.auth
 
 import com.qppd.pesapp.models.User
 import com.qppd.pesapp.models.UserRole
-import com.qppd.pesapp.supabase.SupabaseManager
-import com.qppd.pesapp.supabase.SupabaseUser
-import com.qppd.pesapp.supabase.toAppUser
-import com.qppd.pesapp.supabase.toSupabaseUser
+import com.qppd.pesapp.data.remote.SupabaseManager
+import com.qppd.pesapp.data.remote.SupabaseUser
+import com.qppd.pesapp.data.remote.toAppUser
+import com.qppd.pesapp.data.remote.toSupabaseUser
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.auth.user.UserSession

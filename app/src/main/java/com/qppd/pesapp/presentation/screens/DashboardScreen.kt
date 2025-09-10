@@ -1,4 +1,4 @@
-package com.qppd.pesapp.screens
+package com.qppd.pesapp.presentation.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.qppd.pesapp.models.User
 import com.qppd.pesapp.models.UserRole
-import com.qppd.pesapp.navigation.BottomNavItem
 import com.qppd.pesapp.auth.AuthManager
+import com.qppd.pesapp.presentation.components.BottomNavItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,8 +72,8 @@ fun DashboardScreen(
             NavigationBar {
                 navigationItems.forEachIndexed { index: Int, item: BottomNavItem ->
                     NavigationBarItem(
-                        icon = { Icon(item.icon, contentDescription = item.title) },
-                        label = { Text(item.title) },
+                        icon = { Icon(item.icon, contentDescription = item.label) },
+                        label = { Text(item.label) },
                         selected = selectedIndex == index,
                         onClick = { selectedIndex = index }
                     )

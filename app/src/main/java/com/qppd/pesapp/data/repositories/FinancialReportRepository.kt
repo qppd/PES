@@ -1,9 +1,9 @@
-package com.qppd.pesapp.auth
+package com.qppd.pesapp.data.repositories
 
-import com.qppd.pesapp.data.remote.SupabaseManager
 import com.qppd.pesapp.models.FinancialReport
 import com.qppd.pesapp.models.ReportCategory
 import com.qppd.pesapp.models.ReportStatus
+import com.qppd.pesapp.data.remote.SupabaseManager
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.filter.FilterOperation
 import io.github.jan.supabase.postgrest.query.filter.FilterOperator
@@ -78,14 +78,14 @@ fun FinancialReport.toSupabaseFinancialReport(): SupabaseFinancialReport {
     )
 }
 
-class FinancialReportManager {
+class FinancialReportRepository {
 
     companion object {
         @Volatile
-        private var INSTANCE: FinancialReportManager? = null
-        fun getInstance(): FinancialReportManager {
+        private var INSTANCE: FinancialReportRepository? = null
+        fun getInstance(): FinancialReportRepository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: FinancialReportManager().also { INSTANCE = it }
+                INSTANCE ?: FinancialReportRepository().also { INSTANCE = it }
             }
         }
     }

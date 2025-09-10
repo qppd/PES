@@ -1,25 +1,24 @@
-package com.qppd.pesapp.auth
+package com.qppd.pesapp.data.repositories
 
-import com.qppd.pesapp.data.remote.SupabaseEvent
-import com.qppd.pesapp.data.remote.SupabaseManager
-import com.qppd.pesapp.data.remote.toAppEvent
-import com.qppd.pesapp.data.remote.toSupabaseEvent
 import com.qppd.pesapp.models.Event
 import com.qppd.pesapp.models.EventCategory
-
+import com.qppd.pesapp.data.remote.SupabaseManager
+import com.qppd.pesapp.data.remote.SupabaseEvent
+import com.qppd.pesapp.data.remote.toAppEvent
+import com.qppd.pesapp.data.remote.toSupabaseEvent
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.UUID
 
-class EventManager {
+class EventRepository {
 
     companion object {
         @Volatile
-        private var INSTANCE: EventManager? = null
-        fun getInstance(): EventManager {
+        private var INSTANCE: EventRepository? = null
+        fun getInstance(): EventRepository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: EventManager().also { INSTANCE = it }
+                INSTANCE ?: EventRepository().also { INSTANCE = it }
             }
         }
     }

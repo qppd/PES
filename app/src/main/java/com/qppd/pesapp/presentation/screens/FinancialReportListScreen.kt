@@ -1,4 +1,4 @@
-package com.qppd.pesapp.screens
+package com.qppd.pesapp.presentation.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
